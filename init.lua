@@ -130,6 +130,8 @@ vim.opt.clipboard = 'unnamedplus'
 -- Enable break indent
 vim.opt.breakindent = true
 
+vim.opt.smartindent = false
+
 -- Save undo history
 vim.opt.undofile = true
 
@@ -180,6 +182,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagn
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Convenience keymaps
+vim.keymap.set('n', '<leader>-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 vim.keymap.set('n', '<leader>o', 'o<Esc>', { silent = true })
 vim.keymap.set('n', '<leader>O', 'O<Esc>', { silent = true })
 
@@ -221,7 +224,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.filetype.add { extension = { gohtml = 'gohtml' } }
-vim.treesitter.language.register('html', { 'gohtml' })
+vim.treesitter.language.register('html', { 'gohtml', 'template' })
 
 vim.filetype.add { extension = { templ = 'templ' } }
 
@@ -577,7 +580,7 @@ require('lazy').setup({
           -- This may be unwanted, since they displace some of your code
           if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
             map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
             end, '[T]oggle Inlay [H]ints')
           end
           vim.api.nvim_create_autocmd('BufWritePre', {
@@ -594,8 +597,8 @@ require('lazy').setup({
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
+      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities()) or capabilities
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -608,15 +611,15 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {
-          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl', 'gohtml' },
+          filetypes = { 'go', 'gomod', 'gowork', 'gotmpl', 'gohtml', 'template' },
           settings = {
             gopls = {
-              templateExtensions = { 'gohtml' },
+              templateExtensions = { 'gohtml', 'tmpl', 'template', 'html.tmpl' },
             },
           },
         },
         html = {
-          filetypes = { 'html', 'gohtml' },
+          filetypes = { 'html', 'gohtml', 'template' },
           settings = {
             html = {
               format = {
@@ -760,12 +763,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -921,9 +924,9 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'html' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'html' } },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
