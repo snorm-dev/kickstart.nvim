@@ -233,11 +233,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.filetype.add { extension = { gohtml = 'gohtml' } }
-vim.treesitter.language.register('html', { 'gohtml', 'template' })
-
-vim.filetype.add { extension = { templ = 'templ' } }
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -675,16 +670,20 @@ require('lazy').setup({
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
 <<<<<<< HEAD
+<<<<<<< HEAD
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
 =======
               vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
 >>>>>>> 7bbd1e5 (Update init.lua)
+=======
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+>>>>>>> 972bbee (Update init.lua)
             end, '[T]oggle Inlay [H]ints')
           end
           vim.api.nvim_create_autocmd('BufWritePre', {
             pattern = '*.go',
             callback = function()
-              vim.lsp.buf.code_action { context = { only = { 'source.organizeImports' } }, apply = true }
+              vim.lsp.buf.code_action { context = { only = { 'source.organizeImports' }, diagnostics = {} }, apply = true }
             end,
           })
         end,
@@ -1060,12 +1059,34 @@ require('lazy').setup({
       },
       indent = { enable = true, disable = { 'ruby', 'html' } },
     },
+<<<<<<< HEAD
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+=======
+    config = function(_, opts)
+      -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+
+      -- Prefer git instead of curl in order to improve connectivity in some environments
+      require('nvim-treesitter.install').prefer_git = true
+      ---@diagnostic disable-next-line: missing-fields
+      require('nvim-treesitter.configs').setup(opts)
+
+      vim.filetype.add { extension = { gohtml = 'gohtml' } }
+      vim.filetype.add { extension = { templ = 'templ' } }
+      vim.treesitter.language.register('html', { 'gohtml', 'template' })
+
+      -- There are additional nvim-treesitter modules that you can use to interact
+      -- with nvim-treesitter. You should go explore a few and see what interests you:
+      --
+      --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+      --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+      --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    end,
+>>>>>>> 972bbee (Update init.lua)
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
