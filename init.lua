@@ -88,7 +88,7 @@ P.S. You can delete this when you're done too. It's your config now! :)
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = '//'
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
@@ -173,7 +173,7 @@ vim.opt.scrolloff = 10
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
-vim.opt.confirm = true
+-- vim.opt.confirm = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -669,15 +669,7 @@ require('lazy').setup({
           -- This may be unwanted, since they displace some of your code
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
-<<<<<<< HEAD
-<<<<<<< HEAD
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-=======
-              vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
->>>>>>> 7bbd1e5 (Update init.lua)
-=======
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
->>>>>>> 972bbee (Update init.lua)
             end, '[T]oggle Inlay [H]ints')
           end
           vim.api.nvim_create_autocmd('BufWritePre', {
@@ -1059,14 +1051,6 @@ require('lazy').setup({
       },
       indent = { enable = true, disable = { 'ruby', 'html' } },
     },
-<<<<<<< HEAD
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-=======
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
@@ -1086,7 +1070,6 @@ require('lazy').setup({
       --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
->>>>>>> 972bbee (Update init.lua)
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
